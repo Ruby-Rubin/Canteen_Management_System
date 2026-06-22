@@ -1,0 +1,21 @@
+Authentication	
+
+POST /login
+POST /change-password
+
+Student
+GET /menu
+POST /cart/checkout
+GET /orders
+GET /orders/:id
+
+Cook
+GET /orders/live
+GET /orders/preorders
+PUT /orders/:id/status
+
+Admin
+POST /menu
+PUT /menu/:id
+DELETE /menu/:id
+POST /users/bullk-upload
