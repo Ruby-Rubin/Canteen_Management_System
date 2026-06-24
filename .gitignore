@@ -1,7 +1,6 @@
+venv/
 __pycache__/
 *.pyc
-venv/
 .env
 database/*.db
 node_modules/
-dist/
