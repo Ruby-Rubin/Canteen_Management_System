@@ -23,7 +23,7 @@ def get_menu():
             "available": item.available,
             "image_url": item.image_url
         })
-
+    db.close()
     return menu
 
 @menu_bp.route("/menu", methods=["POST"])
@@ -33,6 +33,7 @@ def create_menu_item():
     db= SessionLocal()
 
     if db.query(MenuItem).filter(MenuItem.name == data.get("name")).first() and db.query(MenuItem).filter(MenuItem.category == data.get("category")).first():
+        db.close()
         return {
             "success": False,
             "message": "Menu item already exists"
@@ -44,11 +45,9 @@ def create_menu_item():
         category=data.get("category"),
         image_url=data.get("image_url")
     )
-
-    db = SessionLocal()
-
     db.add(menu_item)
     db.commit()
+    db.close()
 
     return {
         "success": True,
