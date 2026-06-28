@@ -9,6 +9,11 @@ VALID_TRANSITIONS = {
     "PREPARING": "READY",
     "READY": "COMPLETED"
 }
+session_lookup = {
+    2: "Lunch",
+    3: "Snacks",
+    4: "Dinner"
+}
 
 prefix_map = {
     "Breakfast": "B",
@@ -267,3 +272,21 @@ def checkout():
     "token_number": token_number,
     "total_amount": total_amount
 }
+
+@orders_bp.route("/orders/preorders", methods=["GET"])
+def get_preorders():
+    db = SessionLocal()
+    preorders = db.query(MealSession).filter(
+        MealSession.active == True
+    ).first()
+    future_session = db.query(MealSession).filter(
+            MealSession.display_order > preorders.display_order,
+        ).all()
+    future_session_id = [session.session_id for session in future_session]
+    orders= db.query(Order).filter(
+            Order.meal_session_id.in_(future_session_id)
+        ).all()
+    result={
+        "Lunch": [],
+    }
+    
