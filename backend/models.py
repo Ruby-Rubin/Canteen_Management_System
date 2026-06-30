@@ -50,6 +50,12 @@ class MealSession(Base):
 
     name = Column(String, nullable=False)
 
+    display_order = Column(
+        Integer,
+        nullable=False,
+        unique=True
+    )
+
     start_time = Column(String, nullable=False)
 
     end_time = Column(String, nullable=False)

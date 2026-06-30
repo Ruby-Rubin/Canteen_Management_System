@@ -16,8 +16,27 @@ prefix_map = {
     "Snacks": "S",
     "Dinner": "D"
 }
+def serialize_order_summary(order, db):
 
+    student = db.query(User).filter(
+        User.user_id == order.student_id
+    ).first()
 
+    meal_session = db.query(MealSession).filter(
+        MealSession.session_id == order.meal_session_id
+    ).first()
+
+    return {
+        "order_id": order.order_id,
+        "student_name": student.name,
+        "register_no": student.register_no,
+        "meal_session": meal_session.name,
+        "token_number": order.token_number,
+        "status": order.status,
+        "order_type": order.order_type,
+        "payment_method": order.payment_method,
+        "total_amount": float(order.total_amount)
+    }
 
 @orders_bp.route("/orders", methods=["GET"])
 def get_orders():
@@ -25,24 +44,11 @@ def get_orders():
     orders = db.query(Order).all()
     result = []
     for order in orders:
-        student = db.query(User).filter(
-    User.user_id == order.student_id).first()
-    
-        meal_session = db.query(MealSession).filter(
-    MealSession.session_id == order.meal_session_id
-).first()
-        result.append({
-    "order_id": order.order_id,
-    "student_name": student.name,
-    "register_no": student.register_no,
-    "meal_session": meal_session.name,
-    "token_number": order.token_number,
-    "status": order.status,
-    "order_type": order.order_type,
-    "payment_method": order.payment_method,
-    "total_amount": float(order.total_amount)
-})
-    return result   
+        result.append(
+        serialize_order_summary(order, db)
+    )
+    db.close()
+    return result 
 
 @orders_bp.route("/orders/live", methods=["GET"])
 def get_live_orders(): 
@@ -51,6 +57,7 @@ def get_live_orders():
     MealSession.active == True
 ).first()
     if not active_session:
+        db.close()
         return {
         "success": False,
         "message": "No active meal session"
@@ -59,18 +66,11 @@ def get_live_orders():
     Order.meal_session_id == active_session.session_id
 ).all()
     result = []
-    
     for order in orders:
-        student=db.query(User).filter(
-    User.user_id == Order.student_id).first()
-        result.append({
-    "order_id": order.order_id,
-    "student_name": student.name,
-    "register_no": student.register_no,
-    "token_number": order.token_number,
-    "status": order.status,
-    "total_amount": float(order.total_amount)
-})
+        result.append(
+        serialize_order_summary(order, db)
+    )
+    db.close()
     return result
 
 @orders_bp.route("/orders/<int:order_id>", methods=["GET"])
@@ -80,6 +80,7 @@ def get_order(order_id):
     Order.order_id == order_id
 ).first()
     if not order:
+        db.close()
         return {
             "success": False,
             "message": "Order not found"
@@ -105,6 +106,7 @@ def get_order(order_id):
     "price": float(item.price_at_purchase),
     "subtotal": float(item.price_at_purchase) * item.quantity
 })
+    db.close()
     return {
     "order_id": order.order_id,
     "student_name": student.name,
@@ -130,6 +132,7 @@ def update_order_status(order_id):
     ).first()
 
     if not order:
+        db.close()
         return {
             "success": False,
             "message": "Order not found"
@@ -138,14 +141,11 @@ def update_order_status(order_id):
     current_status = order.status
 
     if current_status not in VALID_TRANSITIONS or VALID_TRANSITIONS[current_status] != new_status:
-        return {
-    "success": True,
-    "order_id": order.order_id,
-    "previous_status": current_status,
-    "current_status": new_status,
-    "message": "Order status updated successfully"
-}
-
+        db.close()
+        return{
+    "success": False,
+    "message": f"Invalid status transition from {current_status} to {new_status}"
+}, 400
     order.status = new_status
     db.commit()
     db.close()
@@ -170,12 +170,14 @@ def checkout():
     ).first()
 
     if not student:
+        db.close()
         return {
             "success": False,
             "message": "Student not found"
         }, 404
     
     if student.role != "student":
+        db.close()
         return {
         "success": False,
         "message": "Only students can place orders"
@@ -186,6 +188,7 @@ def checkout():
     ).first()
 
     if not session:
+        db.close()
         return {
             "success": False,
             "message": "Meal session not found"
@@ -196,6 +199,7 @@ def checkout():
     ).first()
 
     if not cart:
+        db.close()
         return {
             "success": False,
             "message": "Cart not found"
@@ -205,6 +209,7 @@ def checkout():
     ).all()
 
     if not cart_items:
+        db.close()
         return {
             "success": False,
             "message": "Cart is empty"
@@ -229,14 +234,18 @@ def checkout():
     )
 
     token_number = f"{prefix}-{order_count}"
+    if session.active:
+        order_type = "LIVE"
+    else:
+        order_type = "PREORDER"
     order = Order(
-        student_id=student_id,
-        meal_session_id=meal_session_id,
-        token_number=token_number,
-        order_type="PREORDER",
-        payment_method=payment_method,
-        total_amount=total_amount
-    )
+    student_id=student_id,
+    meal_session_id=meal_session_id,
+    token_number=token_number,
+    order_type=order_type,
+    payment_method=payment_method,
+    total_amount=total_amount
+)
 
     db.add(order)
     db.commit()
@@ -261,9 +270,44 @@ def checkout():
     db.delete(cart)
     
     db.commit()
+    db.close()
     return {
     "success": True,
     "order_id": order.order_id,
     "token_number": token_number,
     "total_amount": total_amount
 }
+
+@orders_bp.route("/orders/preorders", methods=["GET"])
+def get_preorders():
+
+    db = SessionLocal()
+
+    active_session = db.query(MealSession).filter(
+    MealSession.active == True
+).first()
+    if not active_session:
+        db.close()
+        return {
+        "success": False,
+        "message": "No active meal session"
+    }, 404
+    future_sessions=db.query(MealSession).filter(
+        MealSession.display_order > active_session.display_order
+    ).all()
+    if not future_sessions:
+        db.close()
+        return [] 
+    future_session_ids=[]
+    for session in future_sessions:
+        future_session_ids.append(session.session_id)
+    orders = db.query(Order).filter(
+    Order.meal_session_id.in_(future_session_ids)
+).all()
+    result = []
+    for order in orders:
+        result.append(
+        serialize_order_summary(order, db)
+    )
+    db.close()
+    return result
