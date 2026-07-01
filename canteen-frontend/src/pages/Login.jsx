@@ -1,6 +1,8 @@
+import "./Login.css";
+
 function Login() {
     return (
-        <div>
+        <div className="login-container">
             <h1>College Canteen System</h1>
 
             <h2>Student Login</h2>

@@ -329,7 +329,7 @@ def get_student_order(student_id):
         return{
             "success":False,
             "message":"User not a student"
-        },400
+        },403
     orders=db.query(Order).filter(
         Order.student_id==student_id    
     ).all() 
