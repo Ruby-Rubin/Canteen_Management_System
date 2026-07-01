@@ -311,3 +311,30 @@ def get_preorders():
     )
     db.close()
     return result
+
+@orders_bp.route("/orders/student/<int:student_id>",methods=["GET"])
+def get_student_order(student_id):
+    db=SessionLocal()
+    student=db.query(User).filter(
+        User.user_id==student_id
+    ).first()
+    if not student:
+        db.close()
+        return{
+            "success":False,
+            "message":"Student not found"
+        },400
+    if student.role!="student":
+        db.close()
+        return{
+            "success":False,
+            "message":"User not a student"
+        },400
+    orders=db.query(Order).filter(
+        Order.student_id==student_id    
+    ).all() 
+    result=[]
+    for order in orders:
+        result.append(serialize_order_summary(order,db))
+    db.close()
+    return result
