@@ -1,27 +1,45 @@
 import "./Login.css";
+import {useState} from "react"; 
 
 function Login() {
+    const [registerNo,setRegisterNo]=useState("");
+    const [password, setPassword]=useState("");
+    function handleLogin() {
+
+    console.log("Register No:", registerNo);
+    console.log("Password:", password);
+
+}
     return (
         <div className="login-container">
-            <h1>College Canteen System</h1>
 
-            <h2>Student Login</h2>
+            <div className="login-card">
 
-            <input
-                type="text"
-                placeholder="Register Number"
-            />
+                <h1>🍽 College Canteen System</h1>
 
-            <br /><br />
+                <h2>Student Login</h2>
+                <p> Welcome Back!!, Please Sign-in to continue</p>
 
-            <input
-                type="password"
-                placeholder="Password"
-            />
+                <input
+                    type="text"
+                    placeholder="Register Number"
+                    value={registerNo}
+                    onChange={(e)=>setRegisterNo(e.target.value)}
+                />
 
-            <br /><br />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e)=>setPassword(e.target.value)}
+                />
 
-            <button>Login</button>
+                <button onClick={handleLogin}>
+                    Login
+                </button>
+
+            </div>
+
         </div>
     );
 }
