@@ -1,15 +1,36 @@
 import "./Login.css";
 import {useState} from "react"; 
-
+import axios from 'axios';
 function Login() {
     const [registerNo,setRegisterNo]=useState("");
     const [password, setPassword]=useState("");
-    function handleLogin() {
+    
+   async function handleLogin() {
 
-    console.log("Register No:", registerNo);
-    console.log("Password:", password);
+    console.log("Button Clicked!");
+
+    try {
+
+        const response = await axios.post(
+            "http://127.0.0.1:5000/login",
+            {
+                register_no: registerNo,
+                password: password
+            }
+        );
+
+        console.log(response.data);
+
+    } catch (error) {
+
+        console.log(error.response.data);
+
+    }
 
 }
+
+
+
     return (
         <div className="login-container">
 
@@ -43,5 +64,6 @@ function Login() {
         </div>
     );
 }
+
 
 export default Login;

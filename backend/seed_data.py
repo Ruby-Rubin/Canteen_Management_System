@@ -15,7 +15,7 @@ if not existing_user:
         name="Rubin",
         email="rubin@mail.com",
         register_no="23ADS101",
-        password_hash=generate_password_hash("rr"),
+        password_hash=generate_password_hash("rubin123"),
         role="student",
         active=True,
         must_change_password=False

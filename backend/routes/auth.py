@@ -12,15 +12,13 @@ def login():
 
     data = request.get_json()
 
-    email = data.get("email")
+    register_no = data.get("register_no")
     password = data.get("password")
-    role = data.get("role")
 
     db = SessionLocal()
 
     user = db.query(User).filter(
-        User.email == email,
-        User.role == role
+        User.register_no==register_no,
     ).first()
 
     if not user:
