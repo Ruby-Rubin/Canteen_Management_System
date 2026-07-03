@@ -1,13 +1,15 @@
 import "./Login.css";
 import {useState} from "react"; 
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 function Login() {
     const [registerNo,setRegisterNo]=useState("");
     const [password, setPassword]=useState("");
-    
+    const navigate = useNavigate();
    async function handleLogin() {
 
-    console.log("Button Clicked!");
+    
 
     try {
 
@@ -19,7 +21,13 @@ function Login() {
             }
         );
 
-        console.log(response.data);
+        if (response.data.success) {
+    navigate("/student", {
+    state: {
+        user: response.data
+    }
+});
+}
 
     } catch (error) {
 
