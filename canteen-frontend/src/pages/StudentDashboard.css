@@ -1,0 +1,54 @@
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6f9;
+}
+.student-dashboard{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    height: 100vh;
+}
+
+.meal-active{
+    color: #16a34a;
+font-weight: bold;
+font-size: 18px;
+}
+.dashboard-card{
+    width:350px;
+    background:white;
+    margin-bottom:20px;
+    padding:40px;
+    border-radius:12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    text-align:center;  
+}
+.order-now{
+    width:100%;
+    padding:15px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:18px;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+.pre-order,
+.cart,
+.my-orders{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+    margin-top:10px;
+}
+.student-dashboard h1{
+    color:#6021d4;
+    font-size:30px;
+    height:auto;
+}

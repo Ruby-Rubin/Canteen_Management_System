@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import "./StudentDashboard.css";
 
 function StudentDashboard() {
 
@@ -6,12 +7,15 @@ function StudentDashboard() {
     const user = location.state.user;
 
     return (
-        <div>
+        <div className='student-dashboard'>
+            <div className="dashboard-card">
             <h1>Welcome, {user.name} 👋</h1>
-
-            <p>Register Number: {user.register_no}</p>
-
-            <p>Role: {user.role}</p>
+            <p className="meal-active">Lunch is Active</p>
+            <button className="order-now">Order Now</button>
+            <button className='pre-order'>Pre-Order</button>
+            <button className='cart'>Cart</button>
+            <button className='my-orders'>My Orders</button>
+            </div>
         </div>
     );
 }
