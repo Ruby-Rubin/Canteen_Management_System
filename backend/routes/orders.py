@@ -347,3 +347,25 @@ def get_student_order(student_id):
         result.append(serialize_order_summary(order,db))
     db.close()
     return result
+
+
+@orders_bp.route("/orders/dashboard", methods=["GET"])
+def get_dashboard():
+    db=SessionLocal()
+    active_session=db.query(MealSession).filter(
+        MealSession.active.is_(True)
+    ).first()
+    if not active_session:
+        db.close()
+        return {
+            "success":False,
+            "message":"No active meal session"
+        }
+    future_sessions = db.query(MealSession).filter(
+        MealSession.display_order > active_session.display_order
+).all()
+    db.close()
+    return {
+        "active_session": serialize_meal_session(active_session),
+        "future_sessions": [serialize_meal_session(session) for session in future_sessions]
+    }
