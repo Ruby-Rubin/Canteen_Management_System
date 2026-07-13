@@ -38,6 +38,13 @@ def serialize_order_summary(order, db):
         "total_amount": float(order.total_amount)
     }
 
+def serialize_meal_session(session):
+    return{
+        "session_id": session.session_id,
+        "meal_name": session.name,
+        "start_time": session.start_time,
+        "end_time": session.end_time
+    }
 @orders_bp.route("/orders", methods=["GET"])
 def get_orders():
     db = SessionLocal()

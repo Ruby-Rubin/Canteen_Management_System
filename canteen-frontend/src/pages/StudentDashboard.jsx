@@ -4,15 +4,10 @@ import "./StudentDashboard.css";
 import axios from "axios";
 
 function StudentDashboard() {
-    useEffect(() => { const  response=await  axios.get("http:///orders/preorders")
-
-}, []);
-
-
     const location = useLocation();
     const [activeSession, setActiveSession] = useState(null);
     const user = location.state.user;
-    setActiveSession(response.data.active_session);
+   
     
     return (
         <div className='student-dashboard'>
