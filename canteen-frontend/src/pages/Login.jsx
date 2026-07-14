@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 function Login() {
     const [registerNo,setRegisterNo]=useState("");
     const [password, setPassword]=useState("");
+    const [showPopup, setShowPopup] = useState(false);
+
+const [popupMessage, setPopupMessage] = useState("");
     const navigate = useNavigate();
    async function handleLogin() {
 
@@ -30,7 +33,8 @@ function Login() {
 }
 
     } catch (error) {
-
+        setPopupMessage(error.response.data.message);
+        setShowPopup(true);
         console.log(error.response.data);
 
     }
@@ -68,9 +72,25 @@ function Login() {
                 </button>
 
             </div>
+            {showPopup && (
+                <div className="popup-overlay">
+                    <div className="popup">
 
-        </div>
-    );
+                    <h3>Error</h3>
+
+                    <p>{popupMessage}</p>
+
+                    <button
+                        onClick={() => setShowPopup(false)}
+                    >
+                        OK
+                    </button>
+
+                    </div>
+                </div>
+            )}
+            </div>
+         );
 }
 
 

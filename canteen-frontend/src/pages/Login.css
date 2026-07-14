@@ -57,3 +57,46 @@ body {
 .login-card button:hover {
     background: #1d4ed8;
 }
+
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,0.4);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.popup{
+    background:white;
+    width:320px;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+.popup h3{
+    color:#dc2626;
+    margin-bottom:15px;
+}
+
+.popup p{
+    color:#444;
+    margin-bottom:20px;
+}
+
+.popup button{
+    width:100%;
+    padding:10px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
