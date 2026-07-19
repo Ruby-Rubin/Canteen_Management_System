@@ -1,12 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import "./StudentDashboard.css";
 import axios from 'axios';
-
     
 function StudentDashboard() {
 const location = useLocation();
 const [activeSession, setActiveSession] = useState(null);
+const navigate = useNavigate();
 const [futureSessions, setFutureSessions] = useState([]);
 const [showPreOrderModal, setShowPreOrderModal] = useState(false);
 const user = location.state.user;
@@ -23,10 +23,18 @@ const user = location.state.user;
     }
    
 
+
     loadDashboard();
 
 }, []);
+function handleOrderNow() {
 
+        if (!activeSession) {
+            return;
+        }
+
+        navigate(`/order/${activeSession.session_id}`);
+    }
     
 
     
@@ -35,7 +43,9 @@ const user = location.state.user;
             <div className="dashboard-card">
             <h1>Welcome, {user.name} 👋</h1>
             <p className="meal-active">{activeSession ? `${activeSession.meal_name} is Active` : "No active session"}</p>
-            <button className="order-now">Order Now</button>    
+            <button className="order-now" disabled={!activeSession} onClick={handleOrderNow}>
+                Order Now
+            </button>
             <button
     className="pre-order"
     onClick={() => setShowPreOrderModal(true)}
