@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import location from 'react-router-dom';
+const { user }= location.state;
 function OrderMenu() {
 
     const { session_id } = useParams();
@@ -22,6 +23,10 @@ function OrderMenu() {
     fetchMenuItems();
 }, [session_id]);
     console.log(menuItems);
+
+    function handleAddToCart(item) {
+
+}
     return (
     <>
         <h1>Order Menu</h1>
@@ -31,6 +36,9 @@ function OrderMenu() {
                 <div key={item.item_id}>
                     <h3>{item.item_name}</h3>
                     <p>₹{item.price}</p>
+                    <button onClick= {() => handleAddToCart(item)}>
+                        Add to Cart
+                    </button>
                 </div>
             );
         })}
