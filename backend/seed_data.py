@@ -88,22 +88,26 @@ menu_items = [
     {
         "name": "Chicken Rice",
         "price": 80,
-        "category": "Lunch"
+        "category": "Lunch",
+        "session_id": 2
     },
     {
         "name": "Veg Meals",
         "price": 70,
-        "category": "Lunch"
+        "category": "Lunch",
+        "session_id": 2
     },
     {
         "name": "Masala Dosa",
         "price": 50,
-        "category": "Breakfast"
+        "category": "Breakfast",
+        "session_id": 1
     },
     {
         "name": "Coffee",
         "price": 20,
-        "category": "Breakfast"
+        "category": "Breakfast",
+        "session_id": 1
     }
 ]
 for item in menu_items:
@@ -117,11 +121,13 @@ for item in menu_items:
         continue
 
     menu = MenuItem(
-        name=item["name"],
-        price=item["price"],
-        category=item["category"],
-        available=True
-    )
+    name=item["name"],
+    price=item["price"],
+    category=item["category"],
+    session_id=item["session_id"],
+    available=True
+)
+    
 
     db.add(menu)
 

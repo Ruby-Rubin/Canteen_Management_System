@@ -16,6 +16,13 @@ prefix_map = {
     "Snacks": "S",
     "Dinner": "D"
 }
+
+def serialize_menu_item(item):
+    return {
+        "item_id": item.menu_item_id,
+        "item_name": item.name,
+        "price": item.price
+    }
 def serialize_order_summary(order, db):
 
     student = db.query(User).filter(
@@ -369,3 +376,19 @@ def get_dashboard():
         "active_session": serialize_meal_session(active_session),
         "future_sessions": [serialize_meal_session(session) for session in future_sessions]
     }
+@orders_bp.route("/menu/<int:session_id>", methods=["GET"])
+def get_menu(session_id):
+
+    db = SessionLocal()
+
+    menu_items = (
+        db.query(MenuItem)
+          .filter(MenuItem.session_id == session_id)
+          .all()
+    )
+
+    response = [serialize_menu_item(item) for item in menu_items]
+
+    db.close()
+
+    return response

@@ -32,6 +32,10 @@ class MenuItem(Base):
     __tablename__ = "menu_items"
 
     menu_item_id = Column(Integer, primary_key=True)
+    session_id = Column(
+    Integer,
+    ForeignKey("meal_sessions.session_id")
+)
 
     name = Column(String, nullable=False)
 
