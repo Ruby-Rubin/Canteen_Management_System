@@ -24,14 +24,16 @@ const [popupMessage, setPopupMessage] = useState("");
             }
         );
         
-        if (response.data.success) {
+       if (response.data.success) {
     console.log(response.data);
     localStorage.setItem("user", JSON.stringify(response.data));
     navigate("/student");
-}}catch (error) {
+}
+} catch (error) {
     setPopupMessage(error.response.data.message);
     setShowPopup(true);
     console.log(error.response.data);
+}
 }
 
 return (
@@ -82,7 +84,7 @@ return (
             )}
             </div>
          );
-}}
+}
 
 
 export default Login;

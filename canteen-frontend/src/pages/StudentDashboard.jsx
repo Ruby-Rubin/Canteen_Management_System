@@ -1,15 +1,15 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import "./StudentDashboard.css";
 import axios from 'axios';
     
 function StudentDashboard() {
-const location = useLocation();
+const user = JSON.parse(localStorage.getItem("user"));
 const [activeSession, setActiveSession] = useState(null);
 const navigate = useNavigate();
 const [futureSessions, setFutureSessions] = useState([]);
 const [showPreOrderModal, setShowPreOrderModal] = useState(false);
-const user = location.state.user;
+
    useEffect(() => {
 
 
@@ -33,11 +33,8 @@ function handleOrderNow() {
             return;
         }
 
-     navigate(`/order/${activeSession.session_id}`, {
-    state: {
-        user: user
-    }
-})};
+     navigate(`/order/${activeSession.session_id}`);
+};
 
     
     return (
@@ -85,6 +82,6 @@ function handleOrderNow() {
             </div>
         </div>
     );
-}
 
+}
 export default StudentDashboard;
