@@ -33,8 +33,11 @@ function handleOrderNow() {
             return;
         }
 
-     navigate(`/order/${activeSession.session_id}`,localStorage.setItem("user", JSON.stringify(response.data))
-};
+     navigate(`/order/${activeSession.session_id}`, {
+    state: {
+        user: user
+    }
+})};
 
     
     return (
@@ -82,6 +85,6 @@ function handleOrderNow() {
             </div>
         </div>
     );
-}}
+}
 
 export default StudentDashboard;

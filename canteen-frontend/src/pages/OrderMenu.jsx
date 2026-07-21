@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import location from 'react-router-dom';
-const { user }= location.state;
 function OrderMenu() {
 
     const { session_id } = useParams();

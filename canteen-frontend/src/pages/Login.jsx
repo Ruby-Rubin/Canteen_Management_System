@@ -23,27 +23,18 @@ const [popupMessage, setPopupMessage] = useState("");
                 password: password
             }
         );
-
+        
         if (response.data.success) {
-    navigate("/student", {
-    state: {
-        user: response.data
-    }
-});
+    console.log(response.data);
+    localStorage.setItem("user", JSON.stringify(response.data));
+    navigate("/student");
+}}catch (error) {
+    setPopupMessage(error.response.data.message);
+    setShowPopup(true);
+    console.log(error.response.data);
 }
 
-    } catch (error) {
-        setPopupMessage(error.response.data.message);
-        setShowPopup(true);
-        console.log(error.response.data);
-
-    }
-
-}
-
-
-
-    return (
+return (
         <div className="login-container">
 
             <div className="login-card">
@@ -91,7 +82,7 @@ const [popupMessage, setPopupMessage] = useState("");
             )}
             </div>
          );
-}
+}}
 
 
 export default Login;
