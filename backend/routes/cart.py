@@ -89,6 +89,7 @@ def add_to_cart():
         )
 
         db.add(cart)
+        db.refresh(cart)
         db.commit()
 
     existing_item = db.query(CartItem).filter(

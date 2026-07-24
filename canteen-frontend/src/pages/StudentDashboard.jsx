@@ -9,7 +9,7 @@ const [activeSession, setActiveSession] = useState(null);
 const navigate = useNavigate();
 const [futureSessions, setFutureSessions] = useState([]);
 const [showPreOrderModal, setShowPreOrderModal] = useState(false);
-
+const [cartCount, setCartCount] = useState(0);
    useEffect(() => {
 
 
@@ -22,9 +22,16 @@ const [showPreOrderModal, setShowPreOrderModal] = useState(false);
     setActiveSession(response.data.active_session);
     }
    
-
+async function loadCartCount() {
+    const response = await axios.get(
+    `http://localhost:5000/cart/session/${user.user_id}/${activeSession.session_id}`
+);
+    total = response.data.reduce((sum, item) => sum + item.quantity,0);
+    setCartCount(total);
+}
 
     loadDashboard();
+    loadCartCount();
 
 }, []);
 function handleOrderNow() {

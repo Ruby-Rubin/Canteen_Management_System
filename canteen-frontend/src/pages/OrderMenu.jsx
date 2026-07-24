@@ -5,6 +5,7 @@ function OrderMenu() {
 
     const { session_id } = useParams();
     const [menuItems, setMenuItems] = useState([]);
+    const user = JSON.parse(localStorage.getItem("user"));
     useEffect(() => {
     async function fetchMenuItems() {
         try {
@@ -22,8 +23,21 @@ function OrderMenu() {
 }, [session_id]);
     console.log(menuItems);
 
-    function handleAddToCart(item) {
+   async function handleAddToCart(item) {
+        const data = {
+        student_id: user.user_id,
+        menu_item_id: item.item_id,
+        quantity: 1,
+        meal_session_id: session_id
+    };
 
+    try {
+       const response = await axios.post("http://localhost:5000/cart/add",data)
+       alert(response.data.message);
+    }catch (error) {
+        console.error(error);
+    }
+    
 }
     return (
     <>
